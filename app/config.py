@@ -1,0 +1,1 @@
+project_root = "/Applications/PycharmProjects/job-alerts"
