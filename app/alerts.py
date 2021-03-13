@@ -48,16 +48,16 @@ class Alerts:
         """
 
         # Check if this is a new listing, if so write to file
-        listings_dir = os.path.join(project_root, "app/listings")
+        listings_dir = os.path.join(project_root, "app/listings/")
         all_listings = [x for x in os.walk(listings_dir)][0]
         if [listing[0]] not in all_listings:
             logging.info("New listing discovered - writing {} to file".format(listing))
-            with open(listings_dir + "/" + listing[0], "wb") as f:
+            with open(listings_dir + listing[0], "wb") as f:
                 pickle.dump(new_listing, f)
             return listing
 
         # Open the file
-        with open(listings_dir + "/" + listing[0], "rb") as f:
+        with open(listings_dir + listing[0], "rb") as f:
             old_listing = pickle.load(f)
 
         if old_listing == new_listing:
@@ -65,7 +65,7 @@ class Alerts:
         else:
             logging.info("New information discovered for listing {}".format(listing))
             # Write new listing information to file for future comparisons
-            with open(listings_dir + "/" + listing[0], "wb") as f:
+            with open(listings_dir + listing[0], "wb") as f:
                 pickle.dump(new_listing, f)
             return listing
 
