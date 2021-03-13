@@ -61,7 +61,7 @@ class Alerts:
             return listing
 
         # Open the file
-        with open(listings_dir + listing[0], "rb") as f:
+        with open(listings_dir + "/" + listing[0], "rb") as f:
             old_listing = pickle.load(f)
 
         if old_listing == new_listing:
