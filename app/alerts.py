@@ -94,7 +94,7 @@ class Alerts:
             server.ehlo()  # Can be omitted
             server.login(cls.sender_email, cls.password)
             sent = server.sendmail(cls.sender_email, cls.receiver_email, message)
-            logging.info("This was the message sent ")
+            logging.info("This was the message sent {}".format(message))
             return sent
         except Exception as e:
             logging.info(e)
