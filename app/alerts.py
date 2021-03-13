@@ -9,7 +9,7 @@ import os
 import json
 
 
-with open("config.json", "r") as f:  # this file should be in project_root directory as runopint is in main.py
+with open("config.json", "r") as f:  # this file should be in project_root directory as runpoint is in main.py
     project_root = json.load(f)["root_dir"]
 
 
