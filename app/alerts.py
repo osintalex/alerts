@@ -6,6 +6,11 @@ from app.credentials import credentials
 import smtplib
 import ssl
 import os
+import json
+
+
+with open("config.json", "r") as f:  # this file should be in project_root directory as runopint is in main.py
+    project_root = json.load(f)["root_dir"]
 
 
 @dataclass
@@ -47,15 +52,16 @@ class Alerts:
         """
 
         # Check if this is a new listing, if so write to file
-        all_listings = [x for x in os.walk("app/listings")][0]
+        listings_dir = os.path.join(project_root, "app/listings")
+        all_listings = [x for x in os.walk(listings_dir)][0]
         if [listing[0]] not in all_listings:
             logging.info("New listing discovered - writing {} to file".format(listing))
-            with open("app/listings/{}".format(listing[0]), "wb") as f:
+            with open(listings_dir + "/" + listing[0], "wb") as f:
                 pickle.dump(new_listing, f)
             return listing
 
         # Open the file
-        with open("app/listings/{}".format(listing[0]), "rb") as f:
+        with open(listings_dir + listing[0], "rb") as f:
             old_listing = pickle.load(f)
 
         if old_listing == new_listing:
@@ -63,7 +69,7 @@ class Alerts:
         else:
             logging.info("New information discovered for listing {}".format(listing))
             # Write new listing information to file for future comparisons
-            with open("app/listings/{}".format(listing[0]), "wb") as f:
+            with open(listings_dir + "/" + listing[0], "wb") as f:
                 pickle.dump(new_listing, f)
             return listing
 
@@ -79,7 +85,7 @@ class Alerts:
 
         # Create a secure SSL context
         context = ssl.create_default_context()
-        message = "Subject: {}\n{}".format(listing[0], listing[1])
+        message = "Subject: {}\n\n{}".format(listing[0], listing[1])
         # Try to log in to server and send email
         try:
             server = smtplib.SMTP(smtp_server, port)
@@ -88,6 +94,7 @@ class Alerts:
             server.ehlo()  # Can be omitted
             server.login(cls.sender_email, cls.password)
             sent = server.sendmail(cls.sender_email, cls.receiver_email, message)
+            logging.info("This was the message sent ")
             return sent
         except Exception as e:
             logging.info(e)
