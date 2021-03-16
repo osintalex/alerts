@@ -16,6 +16,8 @@
 You could use this to check for news articles, to see if a website of interest has changed, to look for a job you're 
 interested in etc.
 
+It works by checking if the number of anchor tags have changed or not, which works for the sites I'm interested in but you could easily adapt this.
+
 ## How to Send Emails in Python
 I did this an extremely simple way with a throw away gmail account for this purpose. The approach I took is detailed
 quiet well [here](https://realpython.com/python-send-email/).

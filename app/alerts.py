@@ -6,7 +6,9 @@ from app.credentials import credentials
 import smtplib
 import ssl
 import os
+import glob
 from .config import project_root
+from bs4 import BeautifulSoup
 
 
 @dataclass
@@ -49,23 +51,27 @@ class Alerts:
 
         # Check if this is a new listing, if so write to file
         listings_dir = os.path.join(project_root, "app/listings/")
-        all_listings = [x for x in os.walk(listings_dir)][0]
-        if [listing[0]] not in all_listings:
+        all_listings = glob.glob(listings_dir + "*.pkl")
+        target = "{}{}.pkl".format(listings_dir, listing[0])
+        if target not in all_listings:
             logging.info("New listing discovered - writing {} to file".format(listing))
-            with open(listings_dir + listing[0], "wb") as f:
+            with open(listings_dir + listing[0] + ".pkl", "wb") as f:
                 pickle.dump(new_listing, f)
             return listing
 
         # Open the file
-        with open(listings_dir + listing[0], "rb") as f:
+        with open(listings_dir + listing[0] + ".pkl", "rb") as f:
             old_listing = pickle.load(f)
 
-        if old_listing == new_listing:
+        # Check for updates by counting number of a tags
+        old_soup = BeautifulSoup(old_listing, "lxml")
+        new_soup = BeautifulSoup(new_listing, "lxml")
+        if len(old_soup.find_all('a')) == len(new_soup.find_all('a')):
             logging.info("No new information discovered for listing {}".format(listing))
         else:
             logging.info("New information discovered for listing {}".format(listing))
             # Write new listing information to file for future comparisons
-            with open(listings_dir + listing[0], "wb") as f:
+            with open(listings_dir + listing[0] + ".pkl", "wb") as f:
                 pickle.dump(new_listing, f)
             return listing
 
