@@ -1,8 +1,8 @@
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 [![forthebadge cc-0](http://ForTheBadge.com/images/badges/cc-0.svg)](http://ForTheBadge.com)
 
-# Alerts - Web App
-> A very simple web app for sending out email alerts. It's pretty basic but I often have to make stuff like this and
+# Alerts - App
+> A very simple app for sending out email alerts. It's pretty basic but I often have to make stuff like this and
 > have struggled to find good examples online, so here's a public repo in case it's helpful to anyone else.
 >
 
